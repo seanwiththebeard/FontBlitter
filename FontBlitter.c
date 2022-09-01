@@ -7,6 +7,14 @@
 #define COLS 40
 #define ROWS 24
 byte* HGR = (byte*)0x2000;
+int RowsHGR[192];
+
+void SetLookupTable()
+{
+  byte y;
+  for (y = 0; y < 192; ++y)
+    RowsHGR[y] = (y/64)*0x28 + (y%8)*0x400 + ((y/8)&7)*0x80;
+}
 
 void SetGraphicsMode()
 {
@@ -15,19 +23,21 @@ void SetGraphicsMode()
   STROBE(0xc057); // hi-res
   STROBE(0xc050); // set graphics mode
   memset((byte*)0x2000, 0, 0x2000); // clear page 1
+  SetLookupTable();
 }
 
-int GetRow(byte y)
+byte y;
+int offset, i;
+void DrawChar(int index, byte xpos, byte ypos)
 {
-  return ((y/64)*0x28 + (y%8)*0x400 + ((y/8)&7)*0x80);
-}
-
-void DrawChar(byte index, byte xpos, byte ypos)
-{
-  byte y;
+  i = index <<3;
+  ypos = ypos << 3;
+  offset= RowsHGR[ypos] + xpos;
   for (y = 0; y < 8; ++y)
   {
-    HGR[GetRow(ypos*8 + y) + xpos] = charset[index * 8 + y];
+    HGR[offset] = charset[i];
+    offset += 0x400;
+    ++i;
   }
 }
 
@@ -39,9 +49,13 @@ void main (void)
   
   while (1)
   {
-  for (y= 0; y < 16; ++y)
-    for (x = 0; x < 16; ++x)
-      DrawChar(x + y*16, x + (i % 24), y + (i % 8));    
-    //++i;
+    for (y= 0; y < 16; ++y)
+      for (x = 0; x < 16; ++x)
+      {
+        DrawChar(i, x, y);
+        ++i;
+        //DrawChar(x + y*16, x + (i % 24), y + (i % 8)); 
+      }
+    i += 16;
   }
 }
