@@ -7,7 +7,27 @@
 #define COLS 40
 #define ROWS 24
 byte* HGR = (byte*)0x2000;
+byte* HGRBuffer = (byte*)0x4000;
 int RowsHGR[192];
+
+byte BufferFlip = 0;
+
+void FlipBuffer()
+{
+  if (BufferFlip)
+  {
+    HGR = (byte*)0x2000;
+    --BufferFlip;
+    STROBE(0xc054); // page 1
+  }
+  else
+  {
+    HGR = (byte*)0x4000;
+    ++BufferFlip;
+    STROBE(0xc055); // page 1
+  }
+  
+}
 
 void SetLookupTable()
 {
@@ -22,7 +42,7 @@ void SetGraphicsMode()
   STROBE(0xc054); // page 1
   STROBE(0xc057); // hi-res
   STROBE(0xc050); // set graphics mode
-  memset((byte*)0x2000, 0, 0x2000); // clear page 1
+  //memset((byte*)0x2000, 0, 0x2000); // clear page 1
   SetLookupTable();
 }
 
@@ -56,6 +76,7 @@ void main (void)
         ++i;
         //DrawChar(x + y*16, x + (i % 24), y + (i % 8)); 
       }
+    //FlipBuffer();
     i += 16;
   }
 }
