@@ -53,6 +53,7 @@ void DrawChar(byte index, byte xpos, byte ypos)
 int main (void)
 {
   byte x, y;
+  byte i = 0;
   SetGraphicsMode();
   //GenerateCharset();
   
@@ -60,7 +61,9 @@ int main (void)
   {
   for (y= 0; y < 16; ++y)
     for (x = 0; x < 16; ++x)
-      DrawChar(x + y*16, x, y);
+      DrawChar(x + y*16, x + (i % 24), y + (i % 8));
+    
+    ++i;
   }
       //DrawChar(0, 0, 0);
       //DrawChar(0, 39, 23);
