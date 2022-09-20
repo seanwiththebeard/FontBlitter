@@ -4,6 +4,7 @@
 #include "Common.h"
 
 void DrawHGRScreen(void);
+void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height);
 void SetLookupTable(void);
 void SetGraphicsMode(void);
 void DrawChar(int index, byte xpos, byte ypos);

@@ -11,7 +11,7 @@ int RowsHGR[192];
 void SetChar(byte index, byte x, byte y)
 {
   TextScreen[x + COLS * y] = index;
-  DrawChar(index, x, y);
+  //DrawChar(index, x, y);
 }
 
 void DrawHGRScreen()
@@ -24,6 +24,22 @@ void DrawHGRScreen()
       DrawChar(TextScreen[i],x, y);
       ++i;
     }
+}
+
+void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height)
+{
+  byte x, y;
+  int i = x + y * COLS;
+  for (y = origin_y; y < origin_y + height; ++y)
+  {
+    i = y * COLS;
+    for (x = origin_x; x < origin_x + width; ++x)
+    {
+      DrawChar(TextScreen[i],x, y);
+      //DrawChar(TextScreen[x + y * COLS],x, y);
+      ++i;
+    }
+  }
 }
 
 void SetLookupTable()

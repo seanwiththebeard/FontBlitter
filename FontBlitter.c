@@ -8,7 +8,6 @@ void main (void)
   byte x, y;
   byte i = 0;
   SetGraphicsMode();
-  printf("hello");
   DrawHGRScreen();
   
   while (1)
@@ -22,6 +21,7 @@ void main (void)
         ++i;
         //DrawChar(x + y*16, x + (i % 24), y + (i % 8)); 
       }
+    DrawHGRScreenArea(0, 0, 16, 16);
     i += 16;
     //DrawHGRScreen();
   }
