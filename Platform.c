@@ -12,8 +12,13 @@ byte* HGRBuffer = (byte*)0x4000;
 int RowsHGR[192];
 
 //Prototypes
+//#if _apple2_
 void DrawHGRScreen(void);
 void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height);
+//#endif
+
+//#if _C64_
+//#endif
 void SetGraphicsMode(void);
 void DrawChar(int index, byte xpos, byte ypos);
 void SetChar(byte index, byte x, byte y);
@@ -22,6 +27,7 @@ void SetCharBuffer(byte index, byte x, byte y);
 //Functions
 void InitGraphics()
 {
+  //#if __apple2__
   byte y;
   memset((byte*)0x0400, ' ', 0x0400); // clear text page 1
   STROBE(0xc052); // turn off mixed-mode
@@ -31,6 +37,10 @@ void InitGraphics()
   memset((byte*)0x2000, 0, 0x2000); // clear HGR page 1
   for (y = 0; y < 192; ++y)
     RowsHGR[y] = (y/64)*0x28 + (y%8)*0x400 + ((y/8)&7)*0x80;
+  //#endif
+  
+  //#if __C64__
+  //#endif
 }
 
 void SetChar(byte index, byte x, byte y)

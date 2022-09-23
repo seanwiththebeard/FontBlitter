@@ -20,6 +20,5 @@ void main (void)
       }
     CopyBufferArea(0, 0, 16, 16);
     i += 16;
-    //DrawHGRScreen();
   }
 }
