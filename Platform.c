@@ -11,41 +11,16 @@ byte* HGR = (byte*)0x2000;
 byte* HGRBuffer = (byte*)0x4000;
 int RowsHGR[192];
 
-void SetChar(byte index, byte x, byte y)
-{
-  TextScreen[x + COLS * y] = index;
-  //DrawChar(index, x, y);
-}
+//Prototypes
+void DrawHGRScreen(void);
+void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height);
+void SetGraphicsMode(void);
+void DrawChar(int index, byte xpos, byte ypos);
+void SetChar(byte index, byte x, byte y);
+void SetCharBuffer(byte index, byte x, byte y);
 
-void DrawHGRScreen()
-{
-  byte x, y;
-  int i = 0;
-  for (y = 0; y < ROWS; ++y)
-    for (x = 0; x < COLS; ++x)
-    {
-      DrawChar(TextScreen[i],x, y);
-      ++i;
-    }
-}
-
-void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height)
-{
-  byte x, y;
-  int i = x + y * COLS;
-  for (y = origin_y; y < origin_y + height; ++y)
-  {
-    i = y * COLS;
-    for (x = origin_x; x < origin_x + width; ++x)
-    {
-      DrawChar(TextScreen[i],x, y);
-      //DrawChar(TextScreen[x + y * COLS],x, y);
-      ++i;
-    }
-  }
-}
-
-void SetGraphicsMode()
+//Functions
+void InitGraphics()
 {
   byte y;
   memset((byte*)0x0400, ' ', 0x0400); // clear text page 1
@@ -56,6 +31,17 @@ void SetGraphicsMode()
   memset((byte*)0x2000, 0, 0x2000); // clear HGR page 1
   for (y = 0; y < 192; ++y)
     RowsHGR[y] = (y/64)*0x28 + (y%8)*0x400 + ((y/8)&7)*0x80;
+}
+
+void SetChar(byte index, byte x, byte y)
+{
+  TextScreen[x + COLS * y] = index;
+  DrawChar(index, x, y);
+}
+
+void SetCharBuffer(byte index, byte x, byte y)
+{
+  TextScreen[x + COLS * y] = index;
 }
 
 byte y;
@@ -70,6 +56,34 @@ void DrawChar(int index, byte xpos, byte ypos)
     HGR[offset] = charset[i];
     offset += 0x400;
     ++i;
+  }
+}
+
+void CopyBuffer()
+{
+  byte x, y;
+  int i = 0;
+  for (y = 0; y < ROWS; ++y)
+    for (x = 0; x < COLS; ++x)
+    {
+      DrawChar(TextScreen[i],x, y);
+      ++i;
+    }
+}
+
+void CopyBufferArea(byte origin_x, byte origin_y, byte width, byte height)
+{
+  byte x, y;
+  int i = x + y * COLS;
+  for (y = origin_y; y < origin_y + height; ++y)
+  {
+    i = y * COLS;
+    for (x = origin_x; x < origin_x + width; ++x)
+    {
+      DrawChar(TextScreen[i],x, y);
+      //DrawChar(TextScreen[x + y * COLS],x, y);
+      ++i;
+    }
   }
 }
 

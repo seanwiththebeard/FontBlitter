@@ -3,9 +3,9 @@
 #define ROWS 24
 #include "Common.h"
 
-void DrawHGRScreen(void);
-void DrawHGRScreenArea(byte origin_x, byte origin_y, byte width, byte height);
-void SetLookupTable(void);
-void SetGraphicsMode(void);
-void DrawChar(int index, byte xpos, byte ypos);
+void InitGraphics(void);
+
+void CopyBuffer(void);
+void CopyBufferArea(byte origin_x, byte origin_y, byte width, byte height);
 void SetChar(byte index, byte x, byte y);
+void SetCharBuffer(byte index, byte x, byte y);
