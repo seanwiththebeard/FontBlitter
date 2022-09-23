@@ -1,6 +1,6 @@
 #include "stdio.h"
 #include "Common.h"
-//#link "System_Graphics_A2CHR.c"
+//#link "Platform.c"
 #include "Platform.h"
 
 void main (void)
